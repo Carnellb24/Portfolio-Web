@@ -1,0 +1,397 @@
+
+/* Directoory */
+
+:root {
+
+    /* Colors */
+
+    --background: #222a2a;
+    --primary: #e2dac2;
+    --accent1: #4fbbbc;
+    --accent2: #ec4624;
+    --accent3: #f39120;
+
+
+    /* Fonts and Typography */
+
+    --font-main: Arial, Helvetica, sans-serif;
+
+
+    /* layout */
+
+    --max-width: 1200px;
+    --radius: 18px;
+    --section-padding: 80px;
+
+    /* Effects */
+
+    --shadow: 0 12px 30px rgba(16,22,34,0.12);
+
+}
+
+/* Animations */
+
+@keyframes slideInLeft{
+
+    from{
+
+        opacity:0;
+        transform:translateX(-75px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateX(0);
+
+    }
+}
+
+@keyframes navDrop{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(-40px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* Whole Page */
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Font */
+
+
+html,
+body{
+    width: 100%;
+    min-height: 100%;
+    background: var(--background);
+}
+
+.itim-regular {
+  font-family: "Itim", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.creepster-regular {
+  font-family: "Creepster", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+/* Nav */
+
+.header {
+
+    position:fixed;
+
+    top:20px;
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    z-index:1000;
+
+
+}
+
+nav  {
+
+    width:min(1100px,95%);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background: var(--accent2);
+
+    padding: 18px 35px;
+
+    background: var(--primary);
+
+    backdrop-filter: blur(12px);
+
+    border-radius:18px;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.3);
+
+    animation:navDrop .8s ease forwards;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(12px);
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 0 20px rgba(236,70,36,.18);
+
+    transition:.35s ease;
+    
+
+}
+
+
+ 
+nav ul {
+
+    list-style: none;
+
+    display: flex;
+
+    justify-content: flex-start;
+
+    gap: 25px;
+
+    align-items: center;
+
+}
+
+
+nav a{
+
+    position:relative;
+    transition:.3s;
+
+}
+
+nav a:hover{
+
+    transform:translateY(-3px);
+
+}
+
+
+nav a::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-8px;
+
+    width:0;
+
+    height:3px;
+
+    background:var(--accent2);
+
+    transition:.3s;
+
+}
+
+nav a:hover::after{
+
+    width:100%;
+}
+
+/* Hero Section */
+
+.hero {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: var(--background);
+
+    padding: 0px;
+
+    background-image:
+
+    linear-gradient(var(--accent2) 2px, transparent 2px),
+
+    linear-gradient(90deg, var(--accent2) 2px, transparent 2px);
+
+    background-size:120px 120px;
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+.hero-content{
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.hero-text{
+
+    flex: 0.5;
+    min-height: 100vh;
+
+    background: var(--background);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 80px;
+    box-sizing: border-box;
+}
+
+.hero-image{
+    flex: 1;
+}
+
+
+
+.hero-text > *{
+
+    opacity:0;
+
+}
+
+.intro {
+
+    color: var(--primary);
+
+    font-size: 1.2rem;
+
+    font-family: "Itim", cursive;
+
+    animation: slideInLeft .8s ease forwards;
+
+}
+
+.hero h1{
+    font-family: "Creepster", system-ui;
+
+    color: var(--accent3);
+
+    font-size: clamp(8rem, 12vw, 12rem);
+
+    line-height: 0.9;
+
+    margin: 0;
+
+    text-shadow: 4px 4px 0 var(--background);
+
+    opacity:0;
+
+    animation: slideInLeft .8s ease forwards;
+
+    animation-delay:.2s;
+}
+
+.hero h2 {
+
+    color: var(--primary);
+
+    margin:15px 0;
+
+    font-family: "Itim", cursive;
+
+    opacity:0;
+
+    animation: slideInLeft .8s ease forwards;
+    
+    animation-delay:.4s;
+}
+
+.hero-description{
+    line-height: 1.7;
+
+    color: var(--primary);
+
+    font-family: "Itim", cursive;
+
+    opacity:0;
+
+    animation: slideInLeft .8s ease forwards;
+    
+    animation-delay:.6s;
+
+}
+
+.hero-buttons {
+    
+    opacity:0;
+
+    animation: slideInLeft .8s ease forwards;
+    
+    animation-delay:.8s;
+}
+
+/* Button */
+
+.btn{
+
+    display:inline-block;
+
+    margin-top:30px;
+
+    padding:15px 30px;
+
+    background:var(--accent2);
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:10px;
+
+    transition:.3s;
+
+}
+
+.btn:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.active{
+
+    color:var(--accent2);
+
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    text-decoration:none;
+
+}
