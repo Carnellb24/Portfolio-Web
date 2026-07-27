@@ -68,7 +68,43 @@
 
 }
 
-/* Whole Page */
+@keyframes float {
+
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+
+}
+
+@keyframes spinDice{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(720deg);
+    }
+
+}
+
+.d20 {
+
+    animation: float 4s ease-in-out infinite;
+
+}
+
+/* =========================
+   GLOBAL
+========================= */
 
 html{
 
@@ -81,9 +117,6 @@ html{
     padding: 0;
     box-sizing: border-box;
 }
-
-/* Font */
-
 
 html,
 body{
@@ -106,7 +139,9 @@ body{
 }
 
 
-/* Nav */
+/* =========================
+   NAVIGATION
+========================= */
 
 .header {
 
@@ -135,7 +170,7 @@ nav  {
 
     align-items: center;
 
-    background: var(--accent2);
+    background: var(--accent1);
 
     padding: 18px 35px;
 
@@ -160,8 +195,6 @@ nav  {
 
 }
 
-
- 
 nav ul {
 
     list-style: none;
@@ -216,7 +249,9 @@ nav a:hover::after{
     width:100%;
 }
 
-/* Hero Section */
+/* =========================
+   HERO
+========================= */
 
 .hero {
 
@@ -234,9 +269,9 @@ nav a:hover::after{
 
     background-image:
 
-    linear-gradient(var(--accent2) 2px, transparent 2px),
+    linear-gradient(var(--accent2) 1px, transparent 1px),
 
-    linear-gradient(90deg, var(--accent2) 2px, transparent 2px);
+    linear-gradient(90deg, var(--accent2) 1px, transparent 1px);
 
     background-size:120px 120px;
 
@@ -263,19 +298,61 @@ nav a:hover::after{
     flex-direction: column;
     justify-content: center;
 
-    padding: 80px;
+    padding-left:80px;
     box-sizing: border-box;
 }
 
 .hero-image{
     flex: 1;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    
+    
+
+}
+
+.d20-widget{
+
+   
+
+    display: flex;
+
+    flex-direction:column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap:35px;
+
 }
 
 
 
+.d20{
+
+    font-size: 18rem;
+
+    color: var(--accent3);
+
+    transition:.3s;
+
+    filter: drop-shadow(0 0 25px rgba(243,145,32,.4));
+    
+    animation:spinDice .8s ease;
+
+}
+
 .hero-text > *{
 
     opacity:0;
+
+    gap:20px;
 
 }
 
@@ -283,7 +360,7 @@ nav a:hover::after{
 
     color: var(--primary);
 
-    font-size: 1.2rem;
+    font-size:clamp(1.2rem,2vw,1.8rem);
 
     font-family: "Itim", cursive;
 
@@ -309,6 +386,8 @@ nav a:hover::after{
     animation: slideInLeft .8s ease forwards;
 
     animation-delay:.2s;
+
+    line-height:.85;
 }
 
 .hero h2 {
@@ -317,6 +396,8 @@ nav a:hover::after{
 
     margin:15px 0;
 
+    font-size: clamp(2rem, 4vw, 4rem);
+
     font-family: "Itim", cursive;
 
     opacity:0;
@@ -324,6 +405,21 @@ nav a:hover::after{
     animation: slideInLeft .8s ease forwards;
     
     animation-delay:.4s;
+}
+
+.hero h2::before{
+    
+    content:"";
+
+    display:block;
+
+    width: 80px;
+
+    height: 6px;
+
+    background: var(--accent2);
+
+    margin-bottom:20px;
 }
 
 .hero-description{
@@ -339,6 +435,10 @@ nav a:hover::after{
     
     animation-delay:.6s;
 
+    max-width:550px;
+
+    font-size: 1.5rem;
+
 }
 
 .hero-buttons {
@@ -350,7 +450,9 @@ nav a:hover::after{
     animation-delay:.8s;
 }
 
-/* Button */
+/* =========================
+   BUTTONS
+========================= */
 
 .btn{
 
@@ -358,9 +460,11 @@ nav a:hover::after{
 
     margin-top:30px;
 
-    padding:15px 30px;
+    padding:18px 40px;
 
-    background:var(--accent2);
+    font-size:1.2rem;
+
+    background:var(--accent1);
 
     color:white;
 
@@ -393,5 +497,85 @@ nav a:hover::after{
     gap:12px;
 
     text-decoration:none;
+
+}
+
+.secondarybtn{
+
+    display:inline-block;
+
+    padding: 15px, 30px;
+
+    border:2px solid var(--accent2);
+
+    color:var(--primary);
+
+    text-decoration: none;
+
+    border-radius: 10px;
+
+    transition: .3s; 
+
+
+}
+
+.secondarybtn:hover{
+
+    background: var(--accent2);
+
+    transform:translateY(-3px)
+
+}
+
+/* =========================
+   ACHIEVEMENT TOAST
+========================= */
+
+.achievement{
+
+    width:340px;
+
+    background:var(--primary);
+
+    color:var(--background);
+
+    border-radius:16px;
+
+    padding:25px;
+
+    text-align:center;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.25);;
+
+    opacity:0;
+
+    transition:opacity .4s ease;
+
+}
+
+.achievement h3{
+    font-size: 1.5rem;
+}
+
+.achievement h4{
+
+    font-size: 2rem;
+
+    margin:15px 0;
+
+    color: var(--accent2);
+
+}
+
+.achievemnt p{
+
+    font-size: 1.2rem;
+
+    line-height: 1.6;
+}
+
+.achievement.show{
+
+    opacity:1;
 
 }

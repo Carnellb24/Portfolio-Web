@@ -5,8 +5,6 @@
 
          <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-         <title>Portfolio</title>
-
          <link rel="stylesheet" href="css/styles.css">
          <link rel="preconnect" href="https://fonts.googleapis.com">
          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,8 +15,9 @@
          <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Creepster&family=Itim&display=swap" rel="stylesheet">
 
          <script src="https://kit.fontawesome.com/a749340bd5.js" crossorigin="anonymous"></script>
+
         
-        <title> Carnell Butler</title>
+        <title>Carnell Butler | Software Engineer</title>
 
     </head>
     <body>
@@ -32,7 +31,7 @@
                     <li><a href="#hero"><i class="fa-solid fa-house"></i></a></li>
                      <li><a href="#about"><i class="fa-regular fa-user"></i></a></li>
                     <li><a href="#skills"><i class="fa-regular fa-pen-to-square"></i></a></li>
-                    <li><a href="#projects"><i class="fa-solid fa-folder"></i></li>
+                    <li><a href="#projects"><i class="fa-solid fa-folder"></i></a></li>
                     <li><a href="#contact"><i class="fa-regular fa-message"></i></i></a></li>
                 </ul>
             </nav>
@@ -41,7 +40,7 @@
 
         <main>
 
-            <section class="hero">
+            <section id="hero" class="hero">
 
                 <div class="hero-content">
 
@@ -65,26 +64,64 @@
                             My goal is to create software that solves real problems and makes people's everyday lives easier. 
                         </p>
 
+                        <div class="hero-buttons">
+
+                            <a href="#projects" class="btn">
+                                View my work
+                            </a>
+
+                        </div>
+
                     </div>
                     <div class="hero-image">
+                        <div class="d20-widget">
+                            <div class="dice-contanier">
+                                <i class="fa-solid fa-dice-d20 d20" id="dice" > </i> 
+                            </div>
+
+                            <button id="roll-btn" class="btn">
+                                Roll the Dice!
+                            </button>
+
+                            <div id="achievement-card" class="achievement hidden">
+
+                                <h3> Achievement Unlocked</h3>
+
+                                <h4 id="achievement-title">
+                                    Dungeon Master
+                                </h4>
+
+                                <p id="achievement-text">
+                                    Built and ran many tabletop RPG campagins over the 10 years 
+                                </p>
+
+                            </div>
+
+                            <a href="#about" class="btn">
+                                View Character Sheet
+                            </a>
+
+                        </div>
 
                     </div>
                 </div>
             </section>
 
-            <section class="about">
+            <section id="about" class="about">
+
+
 
             </section>
 
-            <section class="skills">
+            <section id="skills" class="skills">
 
             </section>
 
-            <section class="projects">
+            <section id="projects" class="projects">
 
             </section>
 
-            <section class="contact">
+            <section id="contact" class="contact">
 
             </section>
 
@@ -93,6 +130,8 @@
         <footer>
 
         </footer>
+
+        <script src="js/scripts.js"></script>
 
     </body>
 
