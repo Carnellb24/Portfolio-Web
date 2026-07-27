@@ -1,6 +1,8 @@
 
 
-/* ahcivement scripts */
+/* =========================
+   DOM ELEMENTS
+========================= */
 
 const rollButton = document.getElementById("roll-btn");
 
@@ -9,6 +11,12 @@ const achievementCard = document.getElementById("achievement-card");
 const achievementTitle = document.getElementById("achievement-title");
 
 const achievementText = document.getElementById("achievement-text");
+
+const dice = document.getElementById("dice");
+
+/* =========================
+   DATA
+========================= */
 
 const achievements = [
 
@@ -42,9 +50,79 @@ const achievements = [
         text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
     },
 
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    },
+
+    {
+        title: "Audio Master",
+        text: "Along with my Software skills, I taught myself sound desgin and audio engineering"
+    }
+
 ];
 
-function rollAchievement() {
+function rollAchievement(){
 
     const randomIndex = Math.floor(Math.random() * achievements.length);
 
@@ -54,28 +132,30 @@ function rollAchievement() {
 
     achievementText.textContent = achievement.text;
 
-}
+    dice.classList.remove("spin");
 
-rollButton.addEventListener("click", rollAchievement);
+    void dice.offsetWidth;
 
-function rollAchievement() {
-
-    const randomIndex = Math.floor(Math.random() * achievements.length);
-
-    const achievement = achievements[randomIndex];
-
-    achievementTitle.textContent = achievement.title;
-
-    achievementText.textContent = achievement.text;
+    dice.classList.add("spin");
+    
+    console.log(dice.className);
 
     achievementCard.classList.add("show");
 
-    setTimeout(() => {
+    dice.classList.add("spin");
+    
+    void dice.offsetWidth;
+
+    setTimeout(()=>{
 
         achievementCard.classList.remove("show");
 
-    }, 3000);
+    },3000);
 
 }
 
+/* =========================
+   EVENT LISTENERS
+========================= */
 
+rollButton.addEventListener("click", rollAchievement);
