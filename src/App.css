@@ -1,0 +1,102 @@
+/* Remove the browser's default spacing */
+*{
+  margin: 0%;
+  padding: 0%;
+  box-sizing: border-box;
+}
+
+/* Main hero section */
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+
+  padding: 0 1% 3rem;
+  overflow: hidden;
+
+  background-color: #08080f;
+}
+/* Background effect layer */
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.crt-warp-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.crt-warp-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Left side: Lanyard */
+.hero-lanyard {
+  position: relative;
+  width: 200%;
+  height: 10vh;
+  min-height: 110vh;
+  margin-left: -50%;
+  top: -8vh;
+  align-self: stretch;
+  z-index: 1;
+}
+
+/* Right side: Text */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+}
+/* Headline */
+.hero-content h1 {
+  width: 100%;
+  font-family: 'Press Start 2P', cursive;
+  font-size: clamp(3.5rem, 6vw, 6rem);
+  line-height: 1.1;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* Shuffle animation */
+.hero-content .shuffle-parent {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+/* Introduction */
+.hero-content p {
+  width: 100%;
+  margin-top: 1.5rem;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #b8b8c7;
+  text-align: center;
+}
+
+

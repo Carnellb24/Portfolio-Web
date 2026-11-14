@@ -1,0 +1,24 @@
+
+.shuffle-parent {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: visible;
+  white-space: pre-wrap;
+  text-align: center;
+}
+
+.shuffle-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.shuffle-char {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+.shuffle-parent.is-ready {
+  visibility: visible;
+}
+
