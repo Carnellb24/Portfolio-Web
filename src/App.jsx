@@ -8,6 +8,8 @@ import BorderGlow from "./component/BorderGlow";
 import LetterGlitch from "./component/LetterGlitch";
 import ProfileCard from "./component/ProfileCard";
 import AboutFeatures from "./component/AboutFeatures";
+import DiscCascadeCarousel from "./component/DiscCascadeCarousel";
+import { RetroGrid } from "@/components/ui/retro-grid";
 
 function App() {
   return (
@@ -29,11 +31,7 @@ function App() {
 
         {/* Navigation */}
         <BubbleMenu
-          logo={
-            <span className="nav-logo">
-              CARNELL BUTLER
-            </span>
-          }
+          logo={null}
           items={[
             {
               label: "START",
@@ -182,6 +180,76 @@ function App() {
         {/* About Content */}
         <div className="about-content">
           <AboutFeatures />
+        </div>
+      </section>
+      <section className="projects" id="projects">
+        <RetroGrid
+          angle={65}
+          cellSize={65}
+          opacity={0.8}
+          lightLineColor="#C755F7"
+          darkLineColor="#C755F7"
+        />
+ <div className="projects-content">
+          <DiscCascadeCarousel
+            items={[
+              {
+                title: "JobSwipe",
+                pattern: "sunburst",
+                palette: ["#241044", "#C755F7", "#F5A623"],
+                credits: [
+                  { label: "FOCUS", value: "Job Discovery & Matching" },
+                  { label: "STACK", value: "Python / Streamlit / SQLite" },
+                  { label: "STATUS", value: "In Development" },
+                ],
+              },
+              {
+                title: "EndpointAPI",
+                pattern: "eclipse",
+                palette: ["#101C35", "#55A6F7", "#B8D9FF"],
+                credits: [
+                  { label: "FOCUS", value: "Python API Testing Framework" },
+                  { label: "STACK", value: "Python / pytest / Requests" },
+                  { label: "STATUS", value: "In Development" },
+                ],
+              },
+              {
+                title: "WebFly",
+                pattern: "horizon",
+                palette: ["#142D29", "#55D6A5", "#F5D77A"],
+                credits: [
+                  { label: "FOCUS", value: "Browser Automation & Testing" },
+                  { label: "STACK", value: "Python / Playwright / pytest" },
+                  { label: "STATUS", value: "In Development" },
+                ],
+              },
+              {
+                title: "DataGuard",
+                pattern: "rings",
+                palette: ["#32152D", "#E66BAA", "#FFC5DC"],
+                credits: [
+                  { label: "FOCUS", value: "Database Validation Pipeline" },
+                  { label: "STACK", value: "Python / PostgreSQL / SQL / pytest" },
+                  { label: "STATUS", value: "In Development" },
+                ],
+              },
+            ]}
+            height="100vh"
+            discSize="clamp(260px, 48vw, 560px)"
+            defaultIndex={0}
+            details={true}
+            reviews={false}
+            controls={true}
+            autoplay={0}
+            spin={24}
+            brand="NELL / BUILDS"
+            background="transparent"
+            color="#F5EFFB"
+            serif='"Instrument Serif", Georgia, serif'
+            sans='"Inter", sans-serif'
+            display='"Oswald", Impact, sans-serif'
+            hint="DRAG TO EXPLORE"
+          />
         </div>
       </section>
     </main>

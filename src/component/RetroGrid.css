@@ -1,0 +1,126 @@
+.retro-grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  background: #080510;
+  isolation: isolate;
+}
+
+/* Deep purple night sky */
+.retro-grid__sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at 50% 65%,
+      rgba(115, 35, 180, 0.22),
+      transparent 55%
+    ),
+    linear-gradient(
+      180deg,
+      #080510 0%,
+      #10091d 55%,
+      #1b0b2b 100%
+    );
+}
+
+/* Glow along the horizon */
+.retro-grid__glow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 48%;
+  height: 25%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(183, 75, 255, 0.24),
+    rgba(117, 36, 194, 0.08) 40%,
+    transparent 75%
+  );
+  filter: blur(25px);
+}
+
+/* Perspective grid positioning */
+.retro-grid__plane {
+  position: absolute;
+  inset: 0;
+  transform: rotateX(60deg);
+  transform-origin: center top;
+  opacity: 0.9;
+
+  background-image:
+    linear-gradient(
+      to right,
+      rgba(190, 91, 255, 0.7) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(190, 91, 255, 0.7) 1px,
+      transparent 1px
+    );
+
+  background-size: 60px 60px;
+
+  animation: retro-grid-scroll 8s linear infinite;
+}
+
+/* Animated neon grid */
+.retro-grid__plane {
+  position: absolute;
+  inset: 0;
+  transform: rotateX(65deg);
+  transform-origin: center top;
+
+  background-image:
+    linear-gradient(
+      to right,
+      rgba(190, 91, 255, 0.55) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(190, 91, 255, 0.55) 1px,
+      transparent 1px
+    );
+
+  background-size: 65px 65px;
+
+  box-shadow: 0 0 25px rgba(168, 67, 255, 0.18);
+
+  animation: retro-grid-scroll 12s linear infinite;
+}
+
+/* Fade the grid into the darkness */
+.retro-grid__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    #080510 0%,
+    transparent 38%,
+    transparent 65%,
+    rgba(8, 5, 16, 0.25) 100%
+  );
+}
+
+/* Grid movement */
+@keyframes retro-grid-scroll {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 0 60px;
+  }
+}
+
+/* Respect reduced-motion settings */
+@media (prefers-reduced-motion: reduce) {
+  .retro-grid__plane {
+    animation: none;
+  }
+}

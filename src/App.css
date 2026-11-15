@@ -368,3 +368,32 @@ html {
     padding: 6rem 1.5rem;
   }
 }
+
+
+/* PROJECTS SECTION */
+
+.projects {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  min-height: 100vh;
+  background: #080510;
+}
+
+.projects > .retro-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.projects-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+}

@@ -4,7 +4,7 @@
   top: 2em;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 16px;
   padding: 0 2em;
   pointer-events: none;
@@ -38,12 +38,7 @@
 }
 
 .bubble-menu .logo-bubble {
-  width: auto;
-  min-height: var(--bubble-size);
-  height: var(--bubble-size);
-  padding: 0 16px;
-  border-radius: calc(var(--bubble-size) / 2);
-  gap: 8px;
+  display: none;
 }
 
 .bubble-menu .toggle-bubble {
