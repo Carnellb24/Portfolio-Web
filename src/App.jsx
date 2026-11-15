@@ -10,6 +10,9 @@ import ProfileCard from "./component/ProfileCard";
 import AboutFeatures from "./component/AboutFeatures";
 import DiscCascadeCarousel from "./component/DiscCascadeCarousel";
 import { RetroGrid } from "@/components/ui/retro-grid";
+import StatsDashboard from "./component/StatsDashboard";
+import ContactSection from "./component/ContactSection";
+import Footer from "./component/Footer";
 
 function App() {
   return (
@@ -190,11 +193,12 @@ function App() {
           lightLineColor="#C755F7"
           darkLineColor="#C755F7"
         />
- <div className="projects-content">
+        <div className="projects-content">
           <DiscCascadeCarousel
             items={[
               {
                 title: "JobSwipe",
+                githubUrl: "https://github.com/Carnellb24/Jobswipe",
                 pattern: "sunburst",
                 palette: ["#241044", "#C755F7", "#F5A623"],
                 credits: [
@@ -205,6 +209,7 @@ function App() {
               },
               {
                 title: "EndpointAPI",
+                githubUrl: "https://github.com/Carnellb24/EndpointAPI",
                 pattern: "eclipse",
                 palette: ["#101C35", "#55A6F7", "#B8D9FF"],
                 credits: [
@@ -215,6 +220,7 @@ function App() {
               },
               {
                 title: "WebFly",
+                githubUrl: "https://github.com/Carnellb24/Webfly",
                 pattern: "horizon",
                 palette: ["#142D29", "#55D6A5", "#F5D77A"],
                 credits: [
@@ -225,6 +231,7 @@ function App() {
               },
               {
                 title: "DataGuard",
+                githubUrl: "https://github.com/Carnellb24/DataGuard",
                 pattern: "rings",
                 palette: ["#32152D", "#E66BAA", "#FFC5DC"],
                 credits: [
@@ -242,7 +249,7 @@ function App() {
             controls={true}
             autoplay={0}
             spin={24}
-            brand="NELL / BUILDS"
+            brand="Project Gallary"
             background="transparent"
             color="#F5EFFB"
             serif='"Instrument Serif", Georgia, serif'
@@ -252,6 +259,14 @@ function App() {
           />
         </div>
       </section>
+      <section id="skills">
+        <StatsDashboard />
+      </section>
+      <section id="contact">
+        <ContactSection />
+      </section>
+      
+      <Footer />
     </main>
   );
 }

@@ -1,0 +1,142 @@
+
+.stats-dashboard {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100vh;
+  padding: 120px 7% 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: transparent;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.stats-header {
+  text-align: center;
+  margin-bottom: 65px;
+}
+
+.stats-eyebrow {
+  display: inline-block;
+  margin-bottom: 22px;
+  color: #a78bfa;
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.stats-header h2 {
+  margin: 0 0 20px;
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(24px, 4vw, 42px);
+  line-height: 1.5;
+  color: #ffffff;
+  text-shadow: 4px 4px 0 #6d28d9;
+}
+
+.stats-header p {
+  color: #a1a1b5;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 20px;
+}
+
+.stats-grid {
+  width: 100%;
+  max-width: 1150px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.stat-card {
+  position: relative;
+  min-height: 230px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(145deg, #17152b, #0e0d1d);
+  border: 2px solid #39305c;
+  box-shadow: 6px 6px 0 #090813;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-6px);
+  border-color: #a78bfa;
+  box-shadow: 6px 10px 0 #6d28d9;
+}
+
+.stat-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-icon {
+  color: #a78bfa;
+  font-family: "Press Start 2P", monospace;
+  font-size: 12px;
+}
+
+.stat-indicator {
+  color: #8b5cf6;
+  font-size: 13px;
+}
+
+.stat-label {
+  margin-top: 28px;
+  color: #aaa4c4;
+  font-family: "Press Start 2P", monospace;
+  font-size: 9px;
+  line-height: 1.8;
+}
+
+.stat-value {
+  margin: 12px 0;
+  color: #ffffff;
+  font-family: "Press Start 2P", monospace;
+  font-size: clamp(18px, 2.5vw, 27px);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  text-shadow: 3px 3px 0 #6d28d9;
+}
+
+.stat-detail {
+  margin: 0;
+  color: #9994ad;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 18px;
+}
+
+@media (max-width: 700px) {
+  .stats-dashboard {
+    padding: 100px 6% 70px;
+  }
+
+  .stats-header {
+    margin-bottom: 40px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .stat-card {
+    min-height: 200px;
+    padding: 24px;
+  }
+}
+
+.stats-header,
+.stats-grid {
+  position: relative;
+  z-index: 1;
+}

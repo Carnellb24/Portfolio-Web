@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -71,9 +72,16 @@ export default function BubbleMenu({
 
   const handleToggle = () => {
     const nextState = !isMenuOpen;
+
     if (nextState) setShowOverlay(true);
+
     setIsMenuOpen(nextState);
     onMenuClick?.(nextState);
+  };
+
+  const handleItemClick = () => {
+    setIsMenuOpen(false);
+    onMenuClick?.(false);
   };
 
   useEffect(() => {
@@ -98,6 +106,7 @@ export default function BubbleMenu({
           duration: animationDuration,
           ease: animationEase
         });
+
         if (labels[i]) {
           tl.to(
             labels[i],
@@ -113,12 +122,14 @@ export default function BubbleMenu({
       });
     } else if (showOverlay) {
       gsap.killTweensOf([...bubbles, ...labels]);
+
       gsap.to(labels, {
         y: 24,
         autoAlpha: 0,
         duration: 0.2,
         ease: 'power3.in'
       });
+
       gsap.to(bubbles, {
         scale: 0,
         duration: 0.2,
@@ -139,6 +150,7 @@ export default function BubbleMenu({
 
         bubbles.forEach((bubble, i) => {
           const item = menuItems[i];
+
           if (bubble && item) {
             const rotation = isDesktop ? (item.rotation ?? 0) : 0;
             gsap.set(bubble, { rotation });
@@ -148,6 +160,7 @@ export default function BubbleMenu({
     };
 
     window.addEventListener('resize', handleResize);
+
     return () => window.removeEventListener('resize', handleResize);
   }, [isMenuOpen, menuItems]);
 
@@ -172,6 +185,7 @@ export default function BubbleMenu({
           <span className="menu-line short" style={{ background: menuContentColor }} />
         </button>
       </nav>
+
       {showOverlay && (
         <div
           ref={overlayRef}
@@ -184,6 +198,7 @@ export default function BubbleMenu({
                 <a
                   role="menuitem"
                   href={item.href}
+                  onClick={handleItemClick}
                   aria-label={item.ariaLabel || item.label}
                   className="pill-link"
                   style={{

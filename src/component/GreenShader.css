@@ -1,0 +1,106 @@
+
+.green-shader {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, #071a13 0%, #080816 75%);
+  isolation: isolate;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+}
+
+.shader-orb {
+  position: absolute;
+  width: 45vw;
+  height: 45vw;
+  max-width: 650px;
+  max-height: 650px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.35;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.shader-orb-one {
+  top: -15%;
+  left: -10%;
+  background: #16a34a;
+  animation: shader-float-one 14s ease-in-out infinite alternate;
+}
+
+.shader-orb-two {
+  right: -10%;
+  bottom: -20%;
+  background: #22c55e;
+  opacity: 0.25;
+  animation: shader-float-two 18s ease-in-out infinite alternate;
+}
+
+.shader-orb-three {
+  top: 25%;
+  left: 35%;
+  width: 30vw;
+  height: 30vw;
+  background: #15803d;
+  opacity: 0.2;
+  animation: shader-pulse 9s ease-in-out infinite alternate;
+}
+
+.shader-mouse-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 320px at var(--mouse-x) var(--mouse-y),
+    rgba(34, 197, 94, 0.2),
+    transparent 75%
+  );
+  transition: background 0.12s ease-out;
+}
+
+.shader-noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+}
+
+@keyframes shader-float-one {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(100px, 80px) scale(1.2);
+  }
+}
+
+@keyframes shader-float-two {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(-120px, -80px) scale(1.25);
+  }
+}
+
+@keyframes shader-pulse {
+  from {
+    transform: scale(0.8);
+    opacity: 0.12;
+  }
+  to {
+    transform: scale(1.3);
+    opacity: 0.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shader-orb {
+    animation: none;
+  }
+}
