@@ -107,12 +107,15 @@ export function springOf(bounce: number, duration: number): { omega: number; sli
 }
 
 export function springStep(x: number, v: number, target: number, omega: number, zeta: number, dt: number): number[] {
-  const steps = Math.max(1, Math.ceil(dt / (1 / 240)))
+  // 120Hz substeps instead of 240Hz: less work per animation frame.
+  const steps = Math.max(1, Math.ceil(dt / (1 / 120)))
   const h = dt / steps
+
   for (let k = 0; k < steps; k++) {
     v += (-omega * omega * (x - target) - 2 * zeta * omega * v) * h
     x += v * h
   }
+
   return [x, v]
 }
 
@@ -135,6 +138,7 @@ export type PoseConfig = { spacing: number; rise: number; depth: number; yaw: nu
 
 export function poseOf(dx: number, d: number, c: PoseConfig) {
   const near = Math.min(d, 2.2)
+
   return {
     x: dx * c.spacing,
     y: -dx * c.rise,
@@ -153,6 +157,7 @@ export function poseOf(dx: number, d: number, c: PoseConfig) {
 
 export function rng(seed: number): () => number {
   let a = seed >>> 0
+
   return () => {
     a = (a + 0x6d2b79f5) >>> 0
     let t = a
@@ -165,11 +170,14 @@ export function rng(seed: number): () => number {
 export function inkFor(bg: string): string {
   const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(bg.trim())
   if (!m) return "#ffffff"
+
   const h = m[1].length === 3 ? m[1].replace(/./g, (c) => c + c) : m[1]
+
   const lin = (i: number) => {
     const v = parseInt(h.slice(i, i + 2), 16) / 255
     return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)
   }
+
   const L = 0.2126 * lin(0) + 0.7152 * lin(2) + 0.0722 * lin(4)
   return L > 0.36 ? "#111111" : "#ffffff"
 }
@@ -177,13 +185,18 @@ export function inkFor(bg: string): string {
 export function wrapLabel(text: string, max: number): string[] {
   const lines: string[] = []
   let cur = ""
+
   for (const w of text.trim().split(/\s+/)) {
     if (!w) continue
+
     if (cur && (cur + " " + w).length > max) {
       lines.push(cur)
       cur = w
-    } else cur = cur ? cur + " " + w : w
+    } else {
+      cur = cur ? cur + " " + w : w
+    }
   }
+
   if (cur) lines.push(cur)
   return lines
 }
@@ -221,7 +234,7 @@ const CSS =
   ".dcc-stage{position:absolute;left:50%;top:52%;width:var(--dcc-s);aspect-ratio:1/1;" +
   "transform:translate(-50%,-50%);perspective:calc(var(--dcc-s) * 3.2)}" +
   ".dcc-slide{position:absolute;inset:0;margin:0;padding:0;border:0;background:none;color:inherit;font:inherit;" +
-  "border-radius:50%;cursor:pointer;will-change:transform;transform-style:preserve-3d;" +
+  "border-radius:50%;cursor:pointer;transform-style:preserve-3d;" +
   "-webkit-tap-highlight-color:transparent;outline:none}" +
   ".dcc-tilt{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.7,.2,1)}" +
   ".dcc-slide[data-active] .dcc-tilt{transform:translateZ(var(--dcc-lift,0px)) " +
@@ -290,7 +303,6 @@ const CSS =
   ".dcc-in{animation:dcc-in .8s cubic-bezier(.2,.7,.1,1) both;animation-delay:calc(var(--i,0) * 60ms)}" +
   "@keyframes dcc-in{from{opacity:0;transform:translateY(12px);filter:blur(5px)}}" +
 
-  /* GitHub button */
   ".dcc-github{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:9px 14px;" +
   "border:1px solid color-mix(in oklab,currentColor 35%,transparent);border-radius:999px;" +
   "color:inherit;background:color-mix(in oklab,currentColor 7%,transparent);" +
@@ -352,28 +364,47 @@ function wedge(a0: number, a1: number, r: number) {
   return "M100 100L" + p(a0) + "A" + r + " " + r + " 0 0 1 " + p(a1) + "Z"
 }
 
-function Art({ pattern, pal, seed, uid }: { pattern: DiscPattern; pal: [string, string, string]; seed: number; uid: string }) {
+// Memoized because the generated artwork is static for a given set of props.
+const Art = React.memo(function Art({
+  pattern,
+  pal,
+  seed,
+  uid,
+}: {
+  pattern: DiscPattern
+  pal: [string, string, string]
+  seed: number
+  uid: string
+}) {
   const [bg, fg, ac] = pal
   const r = rng(seed * 9973 + 17)
   const out: React.ReactNode[] = [<rect key="bg" width="200" height="200" fill={bg} />]
 
   if (pattern === "sunburst") {
     const k = 28
-    for (let i = 0; i < k; i += 2) out.push(<path key={"w" + i} d={wedge((i / k) * Math.PI * 2, ((i + 1) / k) * Math.PI * 2, 142)} fill={fg} />)
+
+    for (let i = 0; i < k; i += 2) {
+      out.push(<path key={"w" + i} d={wedge((i / k) * Math.PI * 2, ((i + 1) / k) * Math.PI * 2, 142)} fill={fg} />)
+    }
+
     out.push(<circle key="c" cx="100" cy="100" r="44" fill={ac} />)
     out.push(<circle key="c2" cx="100" cy="100" r="40.5" fill="none" stroke={bg} strokeWidth="1.6" strokeDasharray="2 3.5" />)
   } else if (pattern === "rings") {
-    for (let rr = 100, i = 0; rr > 36; rr -= 7, i++)
+    for (let rr = 100, i = 0; rr > 36; rr -= 7, i++) {
       out.push(<circle key={"r" + i} cx="100" cy="100" r={rr} fill={i % 3 === 2 ? ac : i % 2 ? bg : fg} />)
+    }
   } else if (pattern === "halftone") {
     const fx = 50 + r() * 100
     const fy = 30 + r() * 60
-    for (let y = 4; y < 200; y += 8)
+
+    for (let y = 4; y < 200; y += 8) {
       for (let x = 4 + ((y / 8) % 2) * 4; x < 200; x += 8) {
         const d = Math.hypot(x - fx, y - fy)
         const rad = Math.max(0, 3.9 - d / 34)
         if (rad > 0.3) out.push(<circle key={x + "-" + y} cx={x} cy={y} r={rad.toFixed(2)} fill={fg} />)
       }
+    }
+
     out.push(<circle key="s" cx={fx} cy={fy} r="16" fill={ac} />)
   } else if (pattern === "horizon") {
     out.push(
@@ -387,11 +418,17 @@ function Art({ pattern, pal, seed, uid }: { pattern: DiscPattern; pal: [string, 
 
     let x = -4
     let i = 0
+
     while (x < 204) {
       const h = 18 + r() * 34
       const w = 7 + r() * 9
-      if (r() > 0.45) out.push(<ellipse key={"t" + i} cx={x} cy={128 - h} rx={w} ry={w * 1.1} fill={fg} />)
-      else out.push(<path key={"t" + i} d={"M" + x + " " + (130 - h * 1.35) + "L" + (x + w * 0.55) + " 130L" + (x - w * 0.55) + " 130Z"} fill={fg} />)
+
+      if (r() > 0.45) {
+        out.push(<ellipse key={"t" + i} cx={x} cy={128 - h} rx={w} ry={w * 1.1} fill={fg} />)
+      } else {
+        out.push(<path key={"t" + i} d={"M" + x + " " + (130 - h * 1.35) + "L" + (x + w * 0.55) + " 130L" + (x - w * 0.55) + " 130Z"} fill={fg} />)
+      }
+
       out.push(<rect key={"k" + i} x={x - 0.9} y={128 - h} width="1.8" height={h} fill={fg} />)
       x += w * (0.9 + r() * 0.8)
       i++
@@ -399,15 +436,21 @@ function Art({ pattern, pal, seed, uid }: { pattern: DiscPattern; pal: [string, 
 
     out.push(<rect key="m" y="128" width="200" height="72" fill={fg} />)
 
-    for (let j = 0; j < 40; j++)
+    for (let j = 0; j < 40; j++) {
       out.push(<circle key={"f" + j} cx={(r() * 200).toFixed(1)} cy={(132 + r() * 66).toFixed(1)} r={(0.6 + r() * 1.2).toFixed(2)} fill={ac} opacity=".8" />)
+    }
   } else if (pattern === "stripes") {
     const g: React.ReactNode[] = []
-    for (let i = -10; i < 20; i++) g.push(<rect key={"s" + i} x={i * 14} y="-60" width="7" height="320" fill={i % 4 === 0 ? ac : fg} />)
+
+    for (let i = -10; i < 20; i++) {
+      g.push(<rect key={"s" + i} x={i * 14} y="-60" width="7" height="320" fill={i % 4 === 0 ? ac : fg} />)
+    }
+
     out.push(<g key="g" transform={"rotate(" + (20 + r() * 40).toFixed(1) + " 100 100)"}>{g}</g>)
   } else if (pattern === "eclipse") {
-    for (let j = 0; j < 70; j++)
+    for (let j = 0; j < 70; j++) {
       out.push(<circle key={"st" + j} cx={(r() * 200).toFixed(1)} cy={(r() * 200).toFixed(1)} r={(0.3 + r() * 0.9).toFixed(2)} fill={fg} opacity={(0.3 + r() * 0.7).toFixed(2)} />)
+    }
 
     out.push(
       <circle key="halo" cx="100" cy="100" r="78" fill="none" stroke={ac} strokeWidth="1" opacity=".6" />,
@@ -417,34 +460,63 @@ function Art({ pattern, pal, seed, uid }: { pattern: DiscPattern; pal: [string, 
     )
   } else {
     const cols = [bg, fg, ac]
-    for (let y = 0; y < 200; y += 20)
+
+    for (let y = 0; y < 200; y += 20) {
       for (let x = 0; x < 200; x += 20) {
         const c = cols[Math.floor(r() * 3)]
         const kind = r()
+
         out.push(<rect key={"q" + x + "-" + y} x={x} y={y} width="20" height="20" fill={c} />)
-        if (kind > 0.7) out.push(<circle key={"o" + x + "-" + y} cx={x + 10} cy={y + 10} r="7" fill={cols[(cols.indexOf(c) + 1) % 3]} />)
-        else if (kind > 0.45) out.push(<path key={"p" + x + "-" + y} d={"M" + x + " " + y + "h20L" + x + " " + (y + 20)} fill={cols[(cols.indexOf(c) + 2) % 3]} />)
+
+        if (kind > 0.7) {
+          out.push(<circle key={"o" + x + "-" + y} cx={x + 10} cy={y + 10} r="7" fill={cols[(cols.indexOf(c) + 1) % 3]} />)
+        } else if (kind > 0.45) {
+          out.push(<path key={"p" + x + "-" + y} d={"M" + x + " " + y + "h20L" + x + " " + (y + 20)} fill={cols[(cols.indexOf(c) + 2) % 3]} />)
+        }
       }
+    }
   }
 
   return <>{out}</>
-}
+})
 
-function Print({ item, i, uid, mark, ink, halo }: { item: DiscCascadeItem; i: number; uid: string; mark: string; ink: string; halo: string }) {
+const Print = React.memo(function Print({
+  item,
+  i,
+  uid,
+  mark,
+  ink,
+  halo,
+}: {
+  item: DiscCascadeItem
+  i: number
+  uid: string
+  mark: string
+  ink: string
+  halo: string
+}) {
   const label = (item.label ?? item.title).toUpperCase()
+
   const fine =
     (item.fine ??
       (item.credits ?? [])
         .map((c) => c.label + " " + lines(c.value).join(", "))
         .join("  ·  ")).toUpperCase()
 
-  const ring = (w: number) => ({ stroke: halo, strokeWidth: item.src ? w * 0.4 : w, strokeLinejoin: "round" as const, paintOrder: "stroke" as const })
+  const ring = (w: number) => ({
+    stroke: halo,
+    strokeWidth: item.src ? w * 0.4 : w,
+    strokeLinejoin: "round" as const,
+    paintOrder: "stroke" as const,
+  })
+
   const stroke = ring(2.4)
   const small = ring(1.2)
   let headline: React.ReactNode = null
 
   if (label && (item.labelStyle ?? "arc") === "arc") {
     const fs = fitSize(label.length, 226 * 0.86, 21)
+
     headline = (
       <text
         fill={ink}
@@ -471,6 +543,7 @@ function Print({ item, i, uid, mark, ink, halo }: { item: DiscCascadeItem; i: nu
         {ls.map((l, k) => {
           const y = y0 + k * lh
           const room = 2 * Math.sqrt(Math.max(0, 86 * 86 - (100 - y + fs * 0.35) ** 2))
+
           return (
             <text
               key={k}
@@ -518,9 +591,9 @@ function Print({ item, i, uid, mark, ink, halo }: { item: DiscCascadeItem; i: nu
       )}
     </svg>
   )
-}
+})
 
-function Hub({ uid }: { uid: string }) {
+const Hub = React.memo(function Hub({ uid }: { uid: string }) {
   return (
     <svg className="dcc-hub" viewBox="0 0 200 200" aria-hidden="true">
       <defs>
@@ -531,6 +604,7 @@ function Hub({ uid }: { uid: string }) {
           <stop offset="1" stopColor="#8f949a" />
         </linearGradient>
       </defs>
+
       <circle cx="100" cy="100" r="35.5" fill="none" stroke={"url(#" + uid + "metal)"} strokeWidth="4" />
       <circle cx="100" cy="100" r="25.5" fill="rgba(232,235,239,.82)" stroke="rgba(232,235,239,.82)" strokeWidth="16" />
       <circle cx="100" cy="100" r="17.6" fill="none" stroke="rgba(255,255,255,.95)" strokeWidth="1.4" />
@@ -541,7 +615,7 @@ function Hub({ uid }: { uid: string }) {
       <circle cx="100" cy="100" r="99.3" fill="none" stroke="rgba(255,255,255,.4)" strokeWidth="1.2" />
     </svg>
   )
-}
+})
 
 // ---- component ----------------------------------------------------------------------
 
@@ -586,6 +660,7 @@ export default function DiscCascadeCarousel({
 }: DiscCascadeCarouselProps) {
   const n = items.length
   const start = Math.min(Math.max(Math.round(index ?? defaultIndex), 0), Math.max(n - 1, 0))
+
   const [active, setActive] = React.useState(start)
   const [dragging, setDragging] = React.useState(false)
   const [stopped, setStopped] = React.useState(false)
@@ -600,10 +675,20 @@ export default function DiscCascadeCarousel({
   const slideRefs = React.useRef([] as (HTMLButtonElement | null)[])
 
   const E = React.useRef({
-    a: start, va: 0, b: start, vb: 0, target: start,
-    raf: 0, last: 0, size: 300, reduced: false,
+    a: start,
+    va: 0,
+    b: start,
+    vb: 0,
+    target: start,
+    raf: 0,
+    last: 0,
+    size: 300,
+    reduced: false,
     drag: null as null | { id: number; x0: number; pos0: number; moved: boolean; samples: { t: number; x: number }[] },
-    clickBlock: false, wheel: 0, wheelAt: 0, stepAt: 0,
+    clickBlock: false,
+    wheel: 0,
+    wheelAt: 0,
+    stepAt: 0,
   }).current
 
   const cfg = React.useRef({ n, loop, spacing, rise, depth, yaw, fan, tilt, roll, bounce, duration })
@@ -632,7 +717,9 @@ export default function DiscCascadeCarousel({
     for (let i = 0; i < slideRefs.current.length; i++) {
       const el = slideRefs.current[i]
       if (!el) continue
+
       const t = styleFor(i, E.a, E.b)
+
       el.style.transform = t.transform
       el.style.zIndex = "" + t.zIndex
       el.style.opacity = t.opacity < 1 ? t.opacity.toFixed(3) : ""
@@ -645,6 +732,7 @@ export default function DiscCascadeCarousel({
   const frame_ = (now: number) => {
     const dt = Math.min((now - (E.last || now)) / 1000, 1 / 20)
     E.last = now
+
     const c = cfg.current
     const s = springOf(c.bounce, c.duration)
 
@@ -653,13 +741,17 @@ export default function DiscCascadeCarousel({
       E.va = E.vb = 0
     } else {
       if (!E.drag) [E.a, E.va] = springStep(E.a, E.va, E.target, s.omega, s.slide, dt)
-        ;[E.b, E.vb] = springStep(E.b, E.vb, E.a, s.omega * 1.05, s.tilt, dt)
+      ;[E.b, E.vb] = springStep(E.b, E.vb, E.a, s.omega * 1.05, s.tilt, dt)
     }
 
     paint()
 
     const settled =
-      !E.drag && Math.abs(E.a - E.target) < 1e-3 && Math.abs(E.va) < 1e-2 && Math.abs(E.b - E.a) < 1e-3 && Math.abs(E.vb) < 1e-2
+      !E.drag &&
+      Math.abs(E.a - E.target) < 1e-3 &&
+      Math.abs(E.va) < 1e-2 &&
+      Math.abs(E.b - E.a) < 1e-3 &&
+      Math.abs(E.vb) < 1e-2
 
     if (settled) {
       E.a = E.b = E.target
@@ -680,7 +772,9 @@ export default function DiscCascadeCarousel({
   const setTarget = (t: number) => {
     const c = cfg.current
     if (!c.n) return
+
     E.target = c.loop ? t : Math.min(Math.max(t, 0), c.n - 1)
+
     const i = indexAt(E.target, c.n, c.loop)
 
     if (i !== cb.current.active) {
@@ -696,23 +790,32 @@ export default function DiscCascadeCarousel({
 
   React.useEffect(() => {
     if (index == null || !n) return
-    if (wrapIndex(Math.round(E.target), n) !== wrapIndex(index, n)) goTo(wrapIndex(index, n))
+
+    if (wrapIndex(Math.round(E.target), n) !== wrapIndex(index, n)) {
+      goTo(wrapIndex(index, n))
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, n])
 
   React.useEffect(() => {
     if (n && !loop && E.target > n - 1) setTarget(n - 1)
+
     paint()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [n, loop, spacing, rise, depth, yaw, fan, tilt, roll])
 
   React.useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
+
     const on = () => {
       E.reduced = mq.matches
     }
+
     on()
     mq.addEventListener("change", on)
+
     return () => mq.removeEventListener("change", on)
   }, [E])
 
@@ -725,8 +828,10 @@ export default function DiscCascadeCarousel({
     }
 
     measure()
+
     const ro = new ResizeObserver(measure)
     ro.observe(el)
+
     return () => ro.disconnect()
   }, [E])
 
@@ -758,7 +863,9 @@ export default function DiscCascadeCarousel({
       e.preventDefault()
 
       const now = performance.now()
+
       if (now - E.wheelAt > 160) E.wheel = 0
+
       E.wheelAt = now
       E.wheel += e.deltaX
 
@@ -771,7 +878,9 @@ export default function DiscCascadeCarousel({
     }
 
     el.addEventListener("wheel", onWheel, { passive: false })
+
     return () => el.removeEventListener("wheel", onWheel)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [E])
 
@@ -783,6 +892,7 @@ export default function DiscCascadeCarousel({
     }
 
     document.addEventListener("pointerdown", onDown)
+
     return () => document.removeEventListener("pointerdown", onDown)
   }, [menu])
 
@@ -809,11 +919,13 @@ export default function DiscCascadeCarousel({
 
     const t = window.setTimeout(() => {
       const c = cfg.current
+
       if (!c.loop && Math.round(E.target) >= c.n - 1) goTo(0)
       else step(1)
     }, autoplay)
 
     return () => window.clearTimeout(t)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playing, active, autoplay])
 
@@ -823,7 +935,13 @@ export default function DiscCascadeCarousel({
     if (e.button !== 0 || !n) return
     if ((e.target as Element).closest("[data-dcc-ui]")) return
 
-    E.drag = { id: e.pointerId, x0: e.clientX, pos0: E.a, moved: false, samples: [{ t: e.timeStamp, x: e.clientX }] }
+    E.drag = {
+      id: e.pointerId,
+      x0: e.clientX,
+      pos0: E.a,
+      moved: false,
+      samples: [{ t: e.timeStamp, x: e.clientX }],
+    }
   }
 
   const onPointerMove = (e: React.PointerEvent) => {
@@ -834,6 +952,7 @@ export default function DiscCascadeCarousel({
       if (st && root) {
         const cx = Math.max(-1, Math.min(1, (e.clientX - (st.left + st.width / 2)) / st.width))
         const cy = Math.max(-1, Math.min(1, (e.clientY - (st.top + st.height / 2)) / st.height))
+
         root.style.setProperty("--dcc-px", cx.toFixed(3))
         root.style.setProperty("--dcc-py", cy.toFixed(3))
       }
@@ -859,9 +978,11 @@ export default function DiscCascadeCarousel({
 
     const c = cfg.current
     const raw = d.pos0 - (e.clientX - d.x0) / (E.size * c.spacing)
+
     E.a = c.loop ? raw : rubber(raw, c.n)
 
     d.samples.push({ t: e.timeStamp, x: e.clientX })
+
     if (d.samples.length > 6) d.samples.shift()
 
     const i = indexAt(E.a, c.n, c.loop)
@@ -892,9 +1013,14 @@ export default function DiscCascadeCarousel({
     const first = d.samples[0]
     const last = d.samples[d.samples.length - 1]
     const ms = Math.max(last.t - first.t, 1)
-    const v = e.type === "pointercancel" ? 0 : (-(last.x - first.x) / ms / (E.size * cfg.current.spacing)) * 1000
+
+    const v =
+      e.type === "pointercancel"
+        ? 0
+        : (-(last.x - first.x) / ms / (E.size * cfg.current.spacing)) * 1000
 
     E.va = v
+
     setTarget(releaseTarget(E.a, v, cfg.current.n, cfg.current.loop))
   }
 
@@ -1128,11 +1254,23 @@ export default function DiscCascadeCarousel({
                         />
                       ) : (
                         <svg viewBox="0 0 200 200" role="img" aria-label={item.alt ?? item.title} style={{ maxWidth: "none" }}>
-                          <Art pattern={item.pattern ?? PATTERNS[i % PATTERNS.length]} pal={pal} seed={i + 1} uid={id} />
+                          <Art
+                            pattern={item.pattern ?? PATTERNS[i % PATTERNS.length]}
+                            pal={pal}
+                            seed={i + 1}
+                            uid={id}
+                          />
                         </svg>
                       )}
 
-                      <Print item={item} i={i} uid={id} mark={brand} ink={ink} halo={item.src ? "rgba(0,0,0,.45)" : pal[0]} />
+                      <Print
+                        item={item}
+                        i={i}
+                        uid={id}
+                        mark={brand}
+                        ink={ink}
+                        halo={item.src ? "rgba(0,0,0,.45)" : pal[0]}
+                      />
                     </span>
                   </span>
 
@@ -1151,7 +1289,11 @@ export default function DiscCascadeCarousel({
             const stars = Math.max(0, Math.min(5, Math.round(q.stars ?? 5)))
 
             return (
-              <figure className="dcc-rev dcc-in" key={k} style={{ margin: 0, ["--i" as string]: k + 3 } as React.CSSProperties}>
+              <figure
+                className="dcc-rev dcc-in"
+                key={k}
+                style={{ margin: 0, ["--i" as string]: k + 3 } as React.CSSProperties}
+              >
                 <div className="dcc-stars">{"★".repeat(stars) + "☆".repeat(5 - stars)}</div>
                 <figcaption className="dcc-src">{q.source}</figcaption>
                 <blockquote className="dcc-quote" style={{ fontFamily: serif }}>
@@ -1167,7 +1309,16 @@ export default function DiscCascadeCarousel({
 
       {controls && n > 1 ? (
         <div className="dcc-ctl" data-dcc-ui="">
-          <button type="button" className="dcc-btn" aria-label="Previous film" disabled={atStart} onClick={() => { setStopped(true); step(-1) }}>
+          <button
+            type="button"
+            className="dcc-btn"
+            aria-label="Previous film"
+            disabled={atStart}
+            onClick={() => {
+              setStopped(true)
+              step(-1)
+            }}
+          >
             <Arrow dir={-1} />
           </button>
 
@@ -1175,7 +1326,16 @@ export default function DiscCascadeCarousel({
             <b>{pad(active + 1)}</b> / {pad(n)}
           </span>
 
-          <button type="button" className="dcc-btn" aria-label="Next film" disabled={atEnd} onClick={() => { setStopped(true); step(1) }}>
+          <button
+            type="button"
+            className="dcc-btn"
+            aria-label="Next film"
+            disabled={atEnd}
+            onClick={() => {
+              setStopped(true)
+              step(1)
+            }}
+          >
             <Arrow dir={1} />
           </button>
         </div>

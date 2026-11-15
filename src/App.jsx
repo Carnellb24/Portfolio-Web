@@ -1,24 +1,30 @@
+
+import { lazy, Suspense } from "react";
 import "./App.css";
+
 import CRTWarp from "./component/CRTWarp";
-import Shuffle from './component/Shuffle';
-import Lanyard from "./component/Lanyard";
+import Shuffle from "./component/Shuffle";
 import BubbleMenu from "./component/BubbleMenu";
 import DecryptedText from "./component/DecryptedText";
 import BorderGlow from "./component/BorderGlow";
 import LetterGlitch from "./component/LetterGlitch";
-import ProfileCard from "./component/ProfileCard";
 import AboutFeatures from "./component/AboutFeatures";
-import DiscCascadeCarousel from "./component/DiscCascadeCarousel";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import StatsDashboard from "./component/StatsDashboard";
 import ContactSection from "./component/ContactSection";
 import Footer from "./component/Footer";
 
+// Load heavier interactive components only when needed.
+const Lanyard = lazy(() => import("./component/Lanyard"));
+const DiscCascadeCarousel = lazy(
+  () => import("./component/DiscCascadeCarousel")
+);
+
 function App() {
   return (
     <main>
       <section className="hero" id="home">
-        {/*Backgroud will go here*/}
+        {/* Background */}
         <div className="hero-background">
           <CRTWarp
             color="#c755f7"
@@ -43,8 +49,8 @@ function App() {
               rotation: -8,
               hoverStyles: {
                 bgColor: "#c755f7",
-                textColor: "#ffffff"
-              }
+                textColor: "#ffffff",
+              },
             },
             {
               label: "PLAYER",
@@ -53,8 +59,8 @@ function App() {
               rotation: 8,
               hoverStyles: {
                 bgColor: "#F5A623",
-                textColor: "#ffffff"
-              }
+                textColor: "#ffffff",
+              },
             },
             {
               label: "BUILDS",
@@ -63,8 +69,8 @@ function App() {
               rotation: -8,
               hoverStyles: {
                 bgColor: "#E5C84B",
-                textColor: "#ffffff"
-              }
+                textColor: "#ffffff",
+              },
             },
             {
               label: "STATS",
@@ -73,8 +79,8 @@ function App() {
               rotation: 8,
               hoverStyles: {
                 bgColor: "#39B96B",
-                textColor: "#ffffff"
-              }
+                textColor: "#ffffff",
+              },
             },
             {
               label: "CONNECT",
@@ -83,9 +89,9 @@ function App() {
               rotation: -8,
               hoverStyles: {
                 bgColor: "#398BE8",
-                textColor: "#ffffff"
-              }
-            }
+                textColor: "#ffffff",
+              },
+            },
           ]}
           menuBg="#171322"
           menuContentColor="#ffffff"
@@ -94,14 +100,16 @@ function App() {
           staggerDelay={0.12}
         />
 
-        {/*Lanyard left side alignment code */}
+        {/* Lanyard */}
         <div className="hero-lanyard">
-          <Lanyard
-            frontImage="/images/lanyard-front.png"
-            orientation="portrait"
-            imageFit="contain"
-            size={0.7}
-          />
+          <Suspense fallback={null}>
+            <Lanyard
+              frontImage="/images/lanyard-front.png"
+              orientation="portrait"
+              imageFit="contain"
+              size={0.7}
+            />
+          </Suspense>
         </div>
 
         {/* Hero text and BorderGlow frame */}
@@ -158,6 +166,7 @@ function App() {
                   scrambleColor="#ffffff"
                 />
               </p>
+
               <a href="#about" className="explore-button">
                 <span>PRESS START</span>
               </a>
@@ -165,9 +174,9 @@ function App() {
           </BorderGlow>
         </div>
       </section>
+
       {/* ABOUT / PLAYER SECTION */}
       <section className="about" id="about">
-        {/* Letter Glitch Background */}
         <div className="about-background">
           <LetterGlitch
             glitchColors={["#F5A623", "#A5A5B2"]}
@@ -180,11 +189,13 @@ function App() {
             interactive={false}
           />
         </div>
-        {/* About Content */}
+
         <div className="about-content">
           <AboutFeatures />
         </div>
       </section>
+
+      {/* PROJECTS SECTION */}
       <section className="projects" id="projects">
         <RetroGrid
           angle={65}
@@ -193,79 +204,122 @@ function App() {
           lightLineColor="#C755F7"
           darkLineColor="#C755F7"
         />
+
         <div className="projects-content">
-          <DiscCascadeCarousel
-            items={[
-              {
-                title: "JobSwipe",
-                githubUrl: "https://github.com/Carnellb24/Jobswipe",
-                pattern: "sunburst",
-                palette: ["#241044", "#C755F7", "#F5A623"],
-                credits: [
-                  { label: "FOCUS", value: "Job Discovery & Matching" },
-                  { label: "STACK", value: "Python / Streamlit / SQLite" },
-                  { label: "STATUS", value: "In Development" },
-                ],
-              },
-              {
-                title: "EndpointAPI",
-                githubUrl: "https://github.com/Carnellb24/EndpointAPI",
-                pattern: "eclipse",
-                palette: ["#101C35", "#55A6F7", "#B8D9FF"],
-                credits: [
-                  { label: "FOCUS", value: "Python API Testing Framework" },
-                  { label: "STACK", value: "Python / pytest / Requests" },
-                  { label: "STATUS", value: "In Development" },
-                ],
-              },
-              {
-                title: "WebFly",
-                githubUrl: "https://github.com/Carnellb24/Webfly",
-                pattern: "horizon",
-                palette: ["#142D29", "#55D6A5", "#F5D77A"],
-                credits: [
-                  { label: "FOCUS", value: "Browser Automation & Testing" },
-                  { label: "STACK", value: "Python / Playwright / pytest" },
-                  { label: "STATUS", value: "In Development" },
-                ],
-              },
-              {
-                title: "DataGuard",
-                githubUrl: "https://github.com/Carnellb24/DataGuard",
-                pattern: "rings",
-                palette: ["#32152D", "#E66BAA", "#FFC5DC"],
-                credits: [
-                  { label: "FOCUS", value: "Database Validation Pipeline" },
-                  { label: "STACK", value: "Python / PostgreSQL / SQL / pytest" },
-                  { label: "STATUS", value: "In Development" },
-                ],
-              },
-            ]}
-            height="100vh"
-            discSize="clamp(260px, 48vw, 560px)"
-            defaultIndex={0}
-            details={true}
-            reviews={false}
-            controls={true}
-            autoplay={0}
-            spin={24}
-            brand="Project Gallary"
-            background="transparent"
-            color="#F5EFFB"
-            serif='"Instrument Serif", Georgia, serif'
-            sans='"Inter", sans-serif'
-            display='"Oswald", Impact, sans-serif'
-            hint="DRAG TO EXPLORE"
-          />
+          <Suspense fallback={null}>
+            <DiscCascadeCarousel
+              items={[
+                {
+                  title: "JobSwipe",
+                  githubUrl: "https://github.com/Carnellb24/Jobswipe",
+                  pattern: "sunburst",
+                  palette: ["#241044", "#C755F7", "#F5A623"],
+                  credits: [
+                    {
+                      label: "FOCUS",
+                      value: "Job Discovery & Matching",
+                    },
+                    {
+                      label: "STACK",
+                      value: "Python / Streamlit / SQLite",
+                    },
+                    {
+                      label: "STATUS",
+                      value: "In Development",
+                    },
+                  ],
+                },
+                {
+                  title: "EndpointAPI",
+                  githubUrl: "https://github.com/Carnellb24/EndpointAPI",
+                  pattern: "eclipse",
+                  palette: ["#101C35", "#55A6F7", "#B8D9FF"],
+                  credits: [
+                    {
+                      label: "FOCUS",
+                      value: "Python API Testing Framework",
+                    },
+                    {
+                      label: "STACK",
+                      value: "Python / pytest / Requests",
+                    },
+                    {
+                      label: "STATUS",
+                      value: "In Development",
+                    },
+                  ],
+                },
+                {
+                  title: "WebFly",
+                  githubUrl: "https://github.com/Carnellb24/Webfly",
+                  pattern: "horizon",
+                  palette: ["#142D29", "#55D6A5", "#F5D77A"],
+                  credits: [
+                    {
+                      label: "FOCUS",
+                      value: "Browser Automation & Testing",
+                    },
+                    {
+                      label: "STACK",
+                      value: "Python / Playwright / pytest",
+                    },
+                    {
+                      label: "STATUS",
+                      value: "In Development",
+                    },
+                  ],
+                },
+                {
+                  title: "DataGuard",
+                  githubUrl: "https://github.com/Carnellb24/DataGuard",
+                  pattern: "rings",
+                  palette: ["#32152D", "#E66BAA", "#FFC5DC"],
+                  credits: [
+                    {
+                      label: "FOCUS",
+                      value: "Database Validation Pipeline",
+                    },
+                    {
+                      label: "STACK",
+                      value: "Python / PostgreSQL / SQL / pytest",
+                    },
+                    {
+                      label: "STATUS",
+                      value: "In Development",
+                    },
+                  ],
+                },
+              ]}
+              height="100vh"
+              discSize="clamp(260px, 48vw, 560px)"
+              defaultIndex={0}
+              details={true}
+              reviews={false}
+              controls={true}
+              autoplay={0}
+              spin={24}
+              brand="Project Gallary"
+              background="transparent"
+              color="#F5EFFB"
+              serif='"Instrument Serif", Georgia, serif'
+              sans='"Inter", sans-serif'
+              display='"Oswald", Impact, sans-serif'
+              hint="DRAG TO EXPLORE"
+            />
+          </Suspense>
         </div>
       </section>
+
+      {/* SKILLS SECTION */}
       <section id="skills">
         <StatsDashboard />
       </section>
+
+      {/* CONTACT SECTION */}
       <section id="contact">
         <ContactSection />
       </section>
-      
+
       <Footer />
     </main>
   );
